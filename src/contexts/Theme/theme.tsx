@@ -15,7 +15,7 @@ export const Provider = ({ children }: HighOrderComponent) => {
 
   const update = async (theme: Theme) => {
     if (Object.keys(THEMES).includes(theme?.mode)) {
-      dispatch({ type: 'add', value: theme });
+      dispatch({ type: `add`, value: theme });
     }
   };
 

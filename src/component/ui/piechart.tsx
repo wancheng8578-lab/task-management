@@ -1,14 +1,17 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { PieChart } from '@mui/x-charts/PieChart';
+import { pieArcLabelClasses, PieChart } from '@mui/x-charts/PieChart';
 import { DefaultizedPieValueType } from '@mui/x-charts/models';
+import { useTheme } from '@/contexts';
 
 type PieChart = {
   chartData: { label: string; value: number; color?: string }[];
 };
 
 const Component = ({ chartData }: PieChart) => {
+  const theme = useTheme();
+
   const [mounted, setMounted] = useState(false);
 
   const TOTAL = chartData.map((item) => item.value).reduce((a, b) => a + b, 0);
@@ -54,6 +57,19 @@ const Component = ({ chartData }: PieChart) => {
 
   return (
     <PieChart
+      sx={{
+        [`& .${pieArcLabelClasses.root}`]: {
+          fill: theme.colors.text,
+        },
+      }}
+      slotProps={{
+        legend: {
+          sx: {
+            fontSize: 14,
+            color: theme.colors.text,
+          },
+        },
+      }}
       series={[
         {
           outerRadius: 80,

@@ -13,6 +13,7 @@ import {
   TablePagination,
 } from '@mui/material';
 import { CSSProperties } from '@mui/material/styles';
+import { useTheme } from '@/contexts';
 
 type Data = {
   className?: string;
@@ -36,6 +37,8 @@ const Component = ({
   headers = [],
   content = [],
 }: Table) => {
+  const theme = useTheme();
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -56,7 +59,11 @@ const Component = ({
   );
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      className={className}
+      sx={{ backgroundColor: theme.colors.containerBackground, ...style }}
+      component={Paper}
+    >
       <Table className={classNameTable}>
         <TableHead>
           {headers.map((row, index) => {
@@ -65,6 +72,7 @@ const Component = ({
                 {row.map(({ children, className, style, colspan }, index1) => {
                   return (
                     <TableCell
+                      sx={{ color: theme.colors.secondary }}
                       key={`col-${index1}`}
                       className={utils.cn(
                         `py-0 pb-2 align-top`,
@@ -117,6 +125,28 @@ const Component = ({
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{
+          '& .MuiTablePagination-selectLabel': {
+            color: theme.colors.primary,
+            fontWeight: 600,
+          },
+
+          '& .MuiTablePagination-displayedRows': {
+            color: theme.colors.primary,
+          },
+
+          '& .MuiSelect-select': {
+            color: theme.colors.primary,
+          },
+          '& .MuiSvgIcon-root': {
+            color: theme.colors.primary,
+          },
+
+          '& .MuiTablePagination-actions .MuiSvgIcon-root': {
+            color: theme.colors.primary,
+            '&:hover': theme.colors.secondary,
+          },
+        }}
       />
     </TableContainer>
   );

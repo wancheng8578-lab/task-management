@@ -2,11 +2,8 @@
 
 import { PieChart, Text, TaskManagementList, CardContainer } from '@/component';
 import { CONSTANTS } from '@/commons';
-import { useTheme } from '@/contexts';
 
 const Component = () => {
-  const theme = useTheme();
-
   const grouped = Object.groupBy(
     CONSTANTS.TASK_MANAGEMENT_LIST,
     (task) => task.status,
@@ -39,11 +36,9 @@ const Component = () => {
           );
         })}
       </div>
-      <div
-        className={`mt-4 rounded-lg border-transparent bg-white px-2 py-4 shadow`}
-      >
+      <CardContainer className={`mt-4`}>
         <PieChart chartData={statusList}></PieChart>
-      </div>
+      </CardContainer>
       <TaskManagementList />
     </div>
   );

@@ -1,7 +1,16 @@
 'use client';
 
 import { CONSTANTS } from '@/commons';
-import { Button, CalendarPicker, Dropdown, Modal, Table, TextBox } from '..';
+import {
+  Button,
+  CalendarPicker,
+  Dropdown,
+  Modal,
+  ModalDeleteConfirmation,
+  Table,
+  TextBox,
+  Text,
+} from '..';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { Controller, useForm } from 'react-hook-form';
@@ -16,6 +25,7 @@ import {
 import { IconButton } from '@mui/material';
 import { utils } from '@/lib';
 import { NewTask } from '@/types';
+import { useTheme } from '@/contexts';
 
 const assigneeOptions = [
   { label: `Alice`, value: `Alice` },
@@ -80,22 +90,27 @@ const quickFilters = [
 ];
 
 const Component = () => {
+  const theme = useTheme();
+
   const [isModalCreateTaskVisible, setIsModalCreateTaskVisible] =
+    useState(false);
+  const [isModalDeleteTaskVisible, setIsModalDeleteTaskVisible] =
     useState(false);
   const [formMode, setFormMode] = useState({ label: ``, value: `` });
   const [editIndex, setEditIndex] = useState<number>(-1);
+  const [deleteIndex, setDeleteIndex] = useState<number>(-1);
   const [quickFilter, setQuickFilter] = useState({
     filterType: { label: ``, value: `` },
     filterValue: { label: ``, value: `` },
   });
+  const [taskList, setTaskList] = useState<NewTask[]>(
+    CONSTANTS.TASK_MANAGEMENT_LIST,
+  );
 
   const FormViewMode = { label: `View Task`, value: `view` };
   const FormCreateMode = { label: `Create Task`, value: `create` };
   const FormEditMode = { label: `Edit Task`, value: `edit` };
-
-  const [taskList, setTaskList] = useState<NewTask[]>(
-    CONSTANTS.TASK_MANAGEMENT_LIST,
-  );
+  const currentTime = dayjs().format(`YYYY-MM-DD`);
 
   const itemSchema = z.object({
     label: z.string(),
@@ -113,8 +128,6 @@ const Component = () => {
   });
 
   type TaskFormValues = z.infer<typeof taskSchema>;
-
-  const currentTime = dayjs().format(`YYYY-MM-DD`);
 
   const {
     control,
@@ -303,31 +316,54 @@ const Component = () => {
               return task[key] === quickFilter.filterValue.value;
             })
             .map((item, index) => {
+              let statusColor;
+
+              if (item.status === `New`) {
+                statusColor = theme.colors.error;
+              }
+              if (item.status === `Completed`) {
+                statusColor = theme.colors.success;
+              }
+              if (item.status === `In Progress`) {
+                statusColor = theme.colors.warn;
+              }
+              if (item.status === `Reviewing`) {
+                statusColor = theme.colors.secondary;
+              }
+
               return [
                 {
-                  children: item.title,
+                  children: <Text>{item.title}</Text>,
                   className: `px-4 pt-3`,
                 },
                 {
-                  children: item.status,
+                  children: (
+                    <Text
+                      className={`rounded-3xl px-4 py-2`}
+                      style={{ backgroundColor: statusColor }}
+                    >
+                      {item.status}
+                    </Text>
+                  ),
                   className: `px-4 pt-3`,
                 },
                 {
-                  children: item.dueDate,
+                  children: <Text>{item.dueDate}</Text>,
                   className: `px-4 pt-3`,
                 },
                 {
-                  children: item.assignee,
+                  children: <Text>{item.assignee}</Text>,
                   className: `px-4 pt-3`,
                 },
                 {
-                  children: item.urgency,
+                  children: <Text>{item.urgency}</Text>,
                   className: `px-4 pt-3`,
                 },
                 {
                   children: (
                     <div className={`flex`}>
                       <IconButton
+                        sx={{ color: theme.colors.primary }}
                         onClick={() => {
                           populateData(item);
 
@@ -338,6 +374,7 @@ const Component = () => {
                         <VisibilityIcon />
                       </IconButton>
                       <IconButton
+                        sx={{ color: theme.colors.primary }}
                         onClick={() => {
                           populateData(item);
 
@@ -349,13 +386,10 @@ const Component = () => {
                         <EditIcon />
                       </IconButton>
                       <IconButton
-                        style={{ color: `red` }}
+                        sx={{ color: theme.colors.error }}
                         onClick={() => {
-                          const newTasks = [...taskList];
-
-                          newTasks.splice(index, 1);
-
-                          setTaskList(newTasks);
+                          setDeleteIndex(index);
+                          setIsModalDeleteTaskVisible(true);
                         }}
                       >
                         <DeleteIcon />
@@ -491,6 +525,19 @@ const Component = () => {
           </div>
         </form>
       </Modal>
+      <ModalDeleteConfirmation
+        isModalVisible={isModalDeleteTaskVisible}
+        setIsModalVisible={setIsModalDeleteTaskVisible}
+        onClick={() => {
+          const newTasks = [...taskList];
+
+          newTasks.splice(deleteIndex, 1);
+
+          setTaskList(newTasks);
+          setDeleteIndex(-1);
+          setIsModalDeleteTaskVisible(false);
+        }}
+      ></ModalDeleteConfirmation>
     </>
   );
 };

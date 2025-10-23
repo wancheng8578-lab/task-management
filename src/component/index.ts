@@ -9,5 +9,7 @@ export { Component as Table } from './ui/table';
 export { Component as CalendarPicker } from './ui/calendar-picker';
 export { Component as Modal } from './ui/modal';
 export { Component as CardContainer } from './ui/card-container';
+export { Component as Image } from './ui/image';
 
 export { Component as TaskManagementList } from './module/task-management-list';
+export { Component as ModalDeleteConfirmation } from './module/modal-delete-confirmation';

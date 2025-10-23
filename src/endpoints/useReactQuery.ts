@@ -17,8 +17,8 @@ const useReactQuery = () => {
       keys: QueryKey,
       func: () => Promise<T>,
       options:
-        | Omit<QueryOptions<T>, 'queryKey'>
-        | Omit<QueryObserverOptions<T>, 'queryKey'> = {},
+        | Omit<QueryOptions<T>, `queryKey`>
+        | Omit<QueryObserverOptions<T>, `queryKey`> = {},
     ) => {
       const result = tanstackUseQuery<T, Error, T, QueryKey>({
         queryKey: keys,

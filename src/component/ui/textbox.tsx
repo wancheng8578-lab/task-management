@@ -5,6 +5,7 @@ import { TextField } from '@mui/material';
 import { FieldError } from 'react-hook-form';
 import { utils } from '@/lib';
 import { CSSProperties } from '@mui/material/styles';
+import { useTheme } from '@/contexts';
 
 type Input = {
   className?: string;
@@ -43,8 +44,29 @@ const Component = forwardRef<HTMLInputElement, Input>(
     }: Input,
     ref,
   ) => {
+    const theme = useTheme();
+
     return (
       <TextField
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: theme.colors.primary,
+            },
+            '&:hover fieldset': {
+              borderColor: theme.colors.secondary,
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: theme.colors.primary,
+            },
+          },
+          '& .MuiInputLabel-root': {
+            color: theme.colors.primary,
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: theme.colors.primary,
+          },
+        }}
         className={className}
         ref={ref}
         id='outlined-basic'

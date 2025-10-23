@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { TextBox, Table } from '@/component';
+import { TextBox, Table, Text } from '@/component';
 import { useListing } from '@/endpoints';
 
 const Component = () => {
@@ -10,12 +10,17 @@ const Component = () => {
 
   return (
     <div className={``}>
-      <TextBox value={username} onChangeValue={setUsername}></TextBox>
+      <TextBox
+        value={username}
+        label={`Filter Id`}
+        onChangeValue={setUsername}
+      ></TextBox>
       <Table
+        className={`mt-4`}
         headers={[
           [
             {
-              children: `Title`,
+              children: `Id`,
               className: `px-4 pt-3`,
             },
             {
@@ -27,11 +32,11 @@ const Component = () => {
         content={(testing.data?.data.list || []).map((item) => {
           return [
             {
-              children: item.id,
+              children: <Text>{item.id}</Text>,
               className: `px-4 pt-3`,
             },
             {
-              children: item.name,
+              children: <Text>{item.name}</Text>,
               className: `px-4 pt-3`,
             },
           ];

@@ -58,7 +58,7 @@ const config: Config = {
     },
   },
   plugins: [
-    plugin(({ addBase }: { addBase: (css: object) => void }) => {
+    plugin(({ addBase }) => {
       addBase({
         html: { fontSize: `14px` },
       });

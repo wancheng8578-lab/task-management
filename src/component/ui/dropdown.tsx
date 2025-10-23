@@ -13,6 +13,7 @@ import { Item } from '@/types';
 import { utils } from '@/lib';
 import { FieldError } from 'react-hook-form';
 import { CSSProperties } from '@mui/material/styles';
+import { useTheme } from '@/contexts';
 
 type Dropdown<T> = {
   label: string;
@@ -34,11 +35,40 @@ const Component = memo(
     isDisabled,
     style,
   }: Dropdown<T>) => {
+    const theme = useTheme();
+
     return (
       <Box sx={style}>
         <FormControl error={!utils.isEmpty(error)} fullWidth>
-          <InputLabel id='demo-simple-select-label'>{label}</InputLabel>
+          <InputLabel
+            sx={{
+              color: theme.colors.primary,
+              '&.Mui-focused': {
+                color: theme.colors.primary,
+              },
+            }}
+            id='demo-simple-select-label'
+          >
+            {label}
+          </InputLabel>
           <Select
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: theme.colors.primary,
+              },
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: theme.colors.primary,
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: theme.colors.primary,
+              },
+              '& .MuiSelect-select': {
+                color: theme.colors.primary,
+              },
+              '& .MuiSelect-icon': {
+                color: theme.colors.primary,
+              },
+            }}
             labelId='demo-simple-select-label'
             id='demo-simple-select'
             value={value.value}

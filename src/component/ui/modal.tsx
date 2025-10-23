@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import { useTheme } from '@/contexts';
 
 type Modal = {
   isVisible: boolean;
@@ -9,16 +10,26 @@ type Modal = {
 };
 
 const Component = ({ isVisible, onClickClose, title, children }: Modal) => {
+  const theme = useTheme();
   return (
     <Dialog
       open={isVisible}
       onClose={onClickClose}
       aria-labelledby='dialog-title'
     >
-      <DialogTitle id='dialog-title'>{title}</DialogTitle>
+      <DialogTitle
+        style={{
+          backgroundColor: theme.colors.modalBackground,
+          color: theme.colors.primary,
+        }}
+        id='dialog-title'
+      >
+        {title}
+      </DialogTitle>
       <DialogContent
         style={{
-          paddingTop: 10, // Or adjust padding as needed
+          backgroundColor: theme.colors.modalBackground,
+          paddingTop: 10,
         }}
       >
         {children}

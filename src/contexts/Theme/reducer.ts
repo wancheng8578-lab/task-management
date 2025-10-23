@@ -11,7 +11,7 @@ type InitialState = {
 const THEMES = { light: lightTheme };
 
 export const initialState: InitialState = {
-  mode: 'light',
+  mode: `light`,
   colors: THEMES.light,
   update: async () => {},
 };
@@ -29,11 +29,11 @@ const reducer = (state = initialState, action: Action) => {
   );
 
   if (!isCurrentAndNewStateDifferent) {
-    type = '';
+    type = ``;
   }
 
   switch (type) {
-    case 'add':
+    case `add`:
       return { ...state, ...value };
     default:
       return state;

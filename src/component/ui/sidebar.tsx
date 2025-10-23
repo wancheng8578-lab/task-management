@@ -1,10 +1,11 @@
 'use client';
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from '@/contexts';
 import { Text } from '@/component';
+import { Switch } from '@mui/material';
 
 type SubItems = {
   href: string;
@@ -56,6 +57,8 @@ const Component = memo(() => {
   const pathname = usePathname();
   const theme = useTheme();
 
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
   // const list: Feature[] = getAccessList(user?.type ?? ``) || [];
   const sideBarItems: Feature[] = ACCESS;
 
@@ -103,20 +106,39 @@ const Component = memo(() => {
     <div
       className={`no-scrollbar flex h-[4rem] w-[100vw] items-center justify-between px-4 shadow`}
       style={{
-        backgroundColor: theme.colors.onBackground,
+        backgroundColor: theme.colors.sideBar,
       }}
     >
       <div className={`flex items-center gap-2`}>
-        <Text className={`font-bold`} style={{ color: theme.colors.primary }}>
+        <Text className={`font-bold`} style={{ color: theme.colors.secondary }}>
           {`Hi`}
         </Text>
       </div>
-      <div className={`flex`}>
+      <div className={`flex items-center gap-2`}>
+        <div>
+          <Switch
+            checked={isDarkMode}
+            onChange={(e) => {
+              setIsDarkMode(e.target.checked);
+              theme.update({
+                mode: e.target.checked ? `dark` : `light`,
+              });
+            }}
+          />
+          <Text>{`Dark Mode`}</Text>
+        </div>
+
         {sideBarItems.map(({ href, title, image_unfocused, image_focused }) => {
           const isFocused = pathname === href;
 
           return (
-            <Link key={title} className={``} href={href} onClick={() => {}}>
+            <Link
+              style={{ color: theme.colors.text }}
+              key={title}
+              className={``}
+              href={href}
+              onClick={() => {}}
+            >
               {renderItemComponent({
                 isFocused,
                 title,
