@@ -49,17 +49,12 @@ const ACCESS = [
   },
 ] as Feature[];
 
-// const getAccessList = (type: string) => {
-//   return ACCESS[type as keyof typeof ACCESS];
-// };
-
 const Component = memo(() => {
   const pathname = usePathname();
   const theme = useTheme();
 
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // const list: Feature[] = getAccessList(user?.type ?? ``) || [];
   const sideBarItems: Feature[] = ACCESS;
 
   const selectedSideBarItem = ACCESS.find(({ href, subItems, childrens }) => {
@@ -111,7 +106,7 @@ const Component = memo(() => {
     >
       <div className={`flex items-center gap-2`}>
         <Text className={`font-bold`} style={{ color: theme.colors.secondary }}>
-          {`Hi`}
+          {`Hi, Bob`}
         </Text>
       </div>
       <div className={`flex items-center gap-2`}>
